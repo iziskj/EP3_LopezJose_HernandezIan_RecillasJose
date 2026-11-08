@@ -1,0 +1,89 @@
+package com.example.ep3_lopezjose_hernandezian_recillasjose
+
+import android.content.ContentValues
+import android.content.Context
+import android.database.sqlite.SQLiteDatabase
+import android.database.sqlite.SQLiteOpenHelper
+
+//Crear clase DatabaseHelper que hereda de la clase SQLite
+class DatabaseHelper(context: Context) : SQLiteOpenHelper(
+    context,
+    DATABASE_NAME,
+    null,
+    DATABASE_VERSION
+) {
+    //Datos de la base de datos ffff
+    companion object{
+        //Información de la BD
+        private const val DATABASE_NAME = "Musica.db"
+        private const val DATABASE_VERSION = 1
+
+        //Información de las tablas en la BD
+        private const val TABLE_USUARIOS = "usuarios"
+        private const val COL_ID = "id"
+        private const val COL_NOMBRE = "nombre"
+        private const val COL_CORREO = "correo"
+        private const val COL_PASSWORD = "password"
+    }
+    //MÉTODO ONCREATE - Para crear la bd
+    override fun onCreate(db: SQLiteDatabase?) {
+        //Crear la tabla
+        val crearTablaUsuarios = """
+            CREATE TABLE $TABLE_USUARIOS(
+            $COL_ID INTEGER PRIMARY KEY AUTOINCREMENT,
+            $COL_NOMBRE TEXT NOT NULL,
+            $COL_CORREO TEXT NOT NULL,
+            $COL_PASSWORD TEXT NOT NULL
+            )
+        """.trimIndent()
+        //Crear tabla de usuarios
+        db?.execSQL(crearTablaUsuarios)
+    }
+    //MÉTODO ONUPGRADE
+    override fun onUpgrade(db: SQLiteDatabase?, oldVersion: Int, newVersion: Int) {
+        db?.execSQL("DROP TABLE IF EXISTS $TABLE_USUARIOS")
+        onCreate(db)
+    }
+    //MÉTODO PARA REGISTRAR UN USUARIO
+    fun registrarUsuario(nombre : String, correo : String, password : String) : Boolean{
+        //Crear variable para escribir en la BD
+        val db = writableDatabase
+        //Insertar los datos
+        val datos = ContentValues().apply {
+            put(COL_NOMBRE, nombre)
+            put(COL_CORREO, correo)
+            put(COL_PASSWORD, password)
+        }
+        //Ejecutar inserción de datos
+        val resultado = db.insert(TABLE_USUARIOS, null, datos)
+        //Cerrar conexión de la BD
+        db.close()
+        //Regresar el valor obtenido de la inserción (Verdadero o falso)
+        return resultado != -1L
+
+    }
+
+    //MÉTODO PARA INICIAR SESIÓN (CONSULTA) 13/ 10 / 2026 Martes
+    fun iniciarSesion(correo: String, password: String) : Boolean{
+        //Variable que lee la base de datos
+        val db = readableDatabase
+        //Crear consulta
+        val query_sql = """         
+            SELECT * FROM ${TABLE_USUARIOS}
+            WHERE ${COL_CORREO} = ? AND ${COL_PASSWORD} = ?
+        """.trimIndent()
+
+        //Crear un cursor que permite recorrer todos los registros
+        val cursor = db.rawQuery(
+            query_sql, arrayOf(correo, password)
+        )
+
+        //Verificar cuantos resultados encuntra el cursor
+        val usuarioEncontrado = cursor.count > 0
+
+        cursor.close()
+        db.close()
+
+        return usuarioEncontrado
+    }
+}
