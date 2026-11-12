@@ -102,6 +102,15 @@
                 android:textColor="#FF6347"
                 android:textSize="13sp"
                 android:textStyle="bold" />
+
+            <ImageButton
+                android:id="@+id/btnGoogle"
+                android:layout_width="35dp"
+                android:layout_height="35dp"
+                android:padding="0dp"
+                android:scaleType="centerInside"
+                android:background="@drawable/bg_boton_circular"
+                android:src="@drawable/google_logo"/>
         </LinearLayout>
     </androidx.cardview.widget.CardView>
 </androidx.constraintlayout.widget.ConstraintLayout>

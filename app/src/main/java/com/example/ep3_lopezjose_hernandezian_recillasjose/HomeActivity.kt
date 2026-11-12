@@ -79,22 +79,16 @@ class HomeActivity : AppCompatActivity() {
 
     private fun mostrarEmpanadas(empanadas: List<Empanada>, nombrePais: String, contenedor: LinearLayout) {
         contenedor.removeAllViews()
-
         //Limitar la cantidad de recetas que se muestran
         val empanadasLimitadas = empanadas.take(5)
-
         for (empanada in empanadasLimitadas) {
             val vistaEmpanada = layoutInflater.inflate(R.layout.item_album, contenedor, false)
-
             val imgPortada = vistaEmpanada.findViewById<ImageView>(R.id.imgPortadaAlbum)
             val tvNombre = vistaEmpanada.findViewById<TextView>(R.id.tvNombreAlbum)
-
             tvNombre.text = empanada.nombre ?: "Empanada Tradicional"
-
             Glide.with(this@HomeActivity)
                 .load(empanada.imagen)
                 .into(imgPortada)
-
             vistaEmpanada.setOnClickListener {
                 val intent = Intent(this@HomeActivity, DetailsActivity::class.java)
                 intent.putExtra("ID_RECETA", empanada.id)
@@ -103,7 +97,6 @@ class HomeActivity : AppCompatActivity() {
                 intent.putExtra("IMAGEN_RECETA", empanada.imagen)
                 startActivity(intent)
             }
-
             contenedor.addView(vistaEmpanada)
         }
     }

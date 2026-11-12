@@ -43,14 +43,11 @@ class DetailsActivity : AppCompatActivity() {
         val nombre = intent.getStringExtra("NOMBRE_RECETA") ?: "Empanada"
         val pais = intent.getStringExtra("PAIS_RECETA") ?: "Origen"
         val imagen = intent.getStringExtra("IMAGEN_RECETA")
-
         tvNombreEmpanadaDetalle.text = nombre
         tvPaisDetalle.text = "País: $pais"
-
         Glide.with(this)
             .load(imagen)
             .into(imgPortadaDetalle)
-
         btnFavorito.setOnClickListener {
             esFavorito = !esFavorito
             if (esFavorito) {
@@ -61,7 +58,6 @@ class DetailsActivity : AppCompatActivity() {
                 Toast.makeText(this, "Eliminado de favoritos", Toast.LENGTH_SHORT).show()
             }
         }
-
         if (idReceta.isNotEmpty()) {
             obtenerDetallesCompletos(idReceta)
         }
@@ -73,7 +69,7 @@ class DetailsActivity : AppCompatActivity() {
                 val receta = response.body()?.results?.firstOrNull()
                 if (receta != null) {
                     tvIngredientesDetalle.text = receta.obtenerIngredientesFormateados()
-                    tvInstruccionesDetalle.text = receta.instrucciones ?: "Mezclar los ingredientes del relleno, rellenar la masa en forma de media luna y hornear o freír a fuego medio hasta dorar."
+                    tvInstruccionesDetalle.text = receta.instrucciones ?: "Mezclar los ingredientes del relleno, rellenar la masa en forma "+ "de media luna y hornear o freír a fuego medio hasta dorar."
                 } else {
                     cargarRecetaPorDefecto()
                 }
@@ -86,7 +82,8 @@ class DetailsActivity : AppCompatActivity() {
     }
 
     private fun cargarRecetaPorDefecto() {
-        tvIngredientesDetalle.text = "• Masa para empanadas\n• Carne molida o guisado tradicional\n• Cebolla y especias al gusto\n• Aceite para freír"
-        tvInstruccionesDetalle.text = "1. Preparar el relleno sazonando con las especias.\n2. Colocar una porción de relleno en el centro del disco de masa.\n3. Doblar a la mitad y cerrar los bordes (repulgue).\n4. Freír en abundante aceite caliente o hornear a 180°C durante 20 minutos."
+        tvIngredientesDetalle.text = "• Masa para empanadas\n• Carne molida o guisado tradicional\n• " + "Cebolla y especias al gusto\n• Aceite para freír"
+        tvInstruccionesDetalle.text = "1. Preparar el relleno sazonando con las especias.\n2. " + "Colocar una porción de relleno en el centro del disco de masa.\n" + "3. Doblar a la mitad y cerrar los bordes (repulgue).\n" + "4. Freír en abundante aceite caliente o hornear a 180°C durante 20 minutos."
     }
 }
+
